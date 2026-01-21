@@ -1,0 +1,59 @@
+{% extends "sklep/base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Twój Koszyk</h2>
+    
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Produkt</th>
+                <th>Ilość</th>
+                <th>Cena jedn.</th>
+                <th>Suma</th>
+                <th>Akcja</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in cart %}
+                {% with product=item.product %}
+                <tr>
+                    <td style="vertical-align: middle; padding: 25px;">{{ product.name }}</td>
+                    <td style="vertical-align: middle; padding: 25px;">{{ item.quantity }}</td>
+                    <td style="vertical-align: middle; padding: 25px;">{{ item.price }} PLN</td>
+                    <td style="vertical-align: middle; padding: 25px;">{{ item.total_price }} PLN</td>
+                    <td style="vertical-align: middle; padding: 25px;">
+                        <a href="{% url 'cart_remove' product.id %}" class="btn btn-primary btn-sm" style="margin-left: 10px;">
+                            Usuń
+                        </a>
+                    </td>
+                </tr>
+                {% endwith %}
+            {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center" style="padding: 30px;">
+                        Twój koszyk jest pusty.
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="row mt-4">
+        <div class="col-md-12 text-right">
+            <h3>Do zapłaty: {{ cart.get_total_price }} PLN</h3>
+        </div>
+    </div>
+
+    <br>
+    <br>
+
+    <div class="row">
+        <div class="col-md-12">
+            <a href="{% url 'Panel_glowny' %}" class="btn btn-primary">
+                Kontynuuj zakupy
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

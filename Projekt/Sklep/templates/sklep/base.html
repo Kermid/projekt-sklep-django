@@ -14,6 +14,14 @@
             <a href="{% url 'Panel_glowny' %}" class="logo">Django<span>Sklep</span></a>
             <ul class="nav-links">
                 <li><a href="{% url 'Panel_glowny' %}">Produkty</a></li>
+                <li>
+                    <a href="{% url 'cart_detail' %}">
+                        Koszyk
+                        {% if cart|length > 0 %}
+                            <span style="font-weight: bold; color: white;">({{ cart|length }})</span>
+                        {% endif %}
+                    </a>
+                </li>
                 {% if user.is_authenticated %}
                     <li><span>Witaj, {{ user.username }}</span></li>
                     <li>
@@ -23,6 +31,7 @@
                         </form>
                     </li>
                 {% else %}
+                
                     <li><a href="{% url 'login' %}">Logowanie</a></li>
                     <li><a href="{% url 'register' %}" class="btn-primary">Rejestracja</a></li>
                 {% endif %}

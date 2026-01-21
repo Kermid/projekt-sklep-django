@@ -8,7 +8,12 @@
         <h3>{{ product.name }}</h3>
         <p class="category">{{ product.category.name }}</p>
         <p class="price">{{ product.price }} zł</p>
-        <button class="btn-primary">Dodaj do koszyka</button>
+        <form action="{% url 'cart_add' product.id %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn-primary">
+                Dodaj do koszyka
+            </button>
+        </form>
     </div>
     {% endfor %}
 </div>

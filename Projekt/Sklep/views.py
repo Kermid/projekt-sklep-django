@@ -1,8 +1,10 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, logout , authenticate
 from django.contrib import messages
 from .models import Product
+from django.views.decorators.http import require_POST
+from .cart import Cart
 
 def product_list(request):
     products = Product.objects.filter(is_active=True)
@@ -37,9 +39,27 @@ def login_user(request):
     else:
         form = AuthenticationForm()
     
-    return render(request, 'Sklep/templates/registrarion/login.html', {'form': form})
+    return render(request, 'registration/login.html', {'form': form})
 
 def logout_user(request):
     logout(request)
     messages.info(request, "Wylogowano pomyślnie.")
     return redirect('Panel_glowny')
+
+@require_POST
+def cart_add(request, product_id):
+    cart = Cart(request)
+    product = get_object_or_404(Product, id=product_id)
+    # Tutaj proste dodanie 1 sztuki. Możesz to rozbudować o formularz ilości.
+    cart.add(product=product, quantity=1)
+    return redirect(request.META.get('HTTP_REFERER', '/'))
+
+def cart_remove(request, product_id):
+    cart = Cart(request)
+    product = get_object_or_404(Product, id=product_id)
+    cart.remove(product)
+    return redirect('cart_detail')
+
+def cart_detail(request):
+    cart = Cart(request)
+    return render(request, 'cart/detail.html', {'cart': cart})
