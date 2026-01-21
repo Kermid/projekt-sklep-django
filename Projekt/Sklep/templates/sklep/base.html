@@ -1,0 +1,43 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Django Sklep</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <a href="{% url 'Panel_glowny' %}" class="logo">Django<span>Sklep</span></a>
+            <ul class="nav-links">
+                <li><a href="{% url 'Panel_glowny' %}">Produkty</a></li>
+                {% if user.is_authenticated %}
+                    <li><span>Witaj, {{ user.username }}</span></li>
+                    <li>
+                        <form action="{% url 'logout' %}" method="post" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn-logout">Wyloguj</button>
+                        </form>
+                    </li>
+                {% else %}
+                    <li><a href="{% url 'login' %}">Logowanie</a></li>
+                    <li><a href="{% url 'register' %}" class="btn-primary">Rejestracja</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container">
+        {% block content %}
+        <!-- Tutaj wejdzie treść z innych plików -->
+        {% endblock %}
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Sklep internetowy w Django</p>
+    </footer>
+</body>
+</html>

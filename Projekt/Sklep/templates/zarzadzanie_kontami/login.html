@@ -1,0 +1,12 @@
+{% extends 'sklep/base.html' %}
+
+{% block content %}
+<div class="form-container">
+    <h2>Zaloguj się</h2>
+    <form method="POST">
+        {% csrf_token %}
+        {{ login_form.as_p }}
+        <button type="submit" class="btn-primary">Zaloguj</button>
+    </form>
+</div>
+{% endblock %}

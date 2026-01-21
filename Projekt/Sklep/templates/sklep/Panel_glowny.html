@@ -1,0 +1,15 @@
+{% extends 'sklep/base.html' %}
+
+{% block content %}
+<h2>Nasza Oferta</h2>
+<div class="product-grid">
+    {% for product in products %}
+    <div class="product-card">
+        <h3>{{ product.name }}</h3>
+        <p class="category">{{ product.category.name }}</p>
+        <p class="price">{{ product.price }} zł</p>
+        <button class="btn-primary">Dodaj do koszyka</button>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
