@@ -17,7 +17,7 @@ def register(request):
             return redirect('Panel_glowny')
     else:
         form = UserCreationForm()
-    return render(request, 'Rejestracja/register.html', {'form': form})
+    return render(request, 'registration/register.html', {'form': form})
 
 def login_user(request):
     if request.method == 'POST':
@@ -25,12 +25,11 @@ def login_user(request):
         if form.is_valid():
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password')
-            # Sprawdzenie czy użytkownik istnieje w MySQL
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
                 messages.info(request, f"Witaj {username}! Zostałeś zalogowany.")
-                return redirect('product_list') # Przekierowanie na stronę główną
+                return redirect('Panel_glowny')
             else:
                 messages.error(request, "Nieprawidłowy login lub hasło.")
         else:
@@ -38,9 +37,9 @@ def login_user(request):
     else:
         form = AuthenticationForm()
     
-    return render(request, 'shop/login.html', {'login_form': form})
+    return render(request, 'Sklep/templates/registrarion/login.html', {'form': form})
 
 def logout_user(request):
     logout(request)
     messages.info(request, "Wylogowano pomyślnie.")
-    return redirect('product_list')
+    return redirect('Panel_glowny')
