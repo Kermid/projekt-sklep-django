@@ -18,12 +18,17 @@
                     <a href="{% url 'cart_detail' %}">
                         Koszyk
                         {% if cart|length > 0 %}
-                            <span style="font-weight: bold; color: white;">({{ cart|length }})</span>
+                            <span style="font-weight: bold;">({{ cart|length }})</span>
                         {% endif %}
                     </a>
                 </li>
                 {% if user.is_authenticated %}
+                    <li>
+                        <a href="{% url 'user_orders' %}" style="font-weight: bold;">Moje Zamówienia</a>
+                    </li>
                     <li><span>Witaj, {{ user.username }}</span></li>
+                    
+                   
                     <li>
                         <form action="{% url 'logout' %}" method="post" style="display:inline;">
                             {% csrf_token %}
@@ -38,6 +43,11 @@
             </ul>
         </nav>
     </header>
+
+    <form method="get" action="{% url 'Panel_glowny' %}" style="margin-bottom: 20px;">
+        <input type="text" name="q" placeholder="Szukaj produktu..." value="{{ request.GET.q }}">
+        <button type="submit">Szukaj</button>
+    </form> 
 
     <main class="container">
         {% block content %}

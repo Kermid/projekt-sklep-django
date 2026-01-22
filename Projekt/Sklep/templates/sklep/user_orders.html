@@ -1,0 +1,40 @@
+{% extends 'Sklep/base.html' %}
+
+{% block content %}
+<div class="container" style="max-width: 800px;">
+    <h2 style="border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 20px;">Historia Twoich Zamówień</h2>
+
+    <div class="orders-list">
+        {% for order in orders %}
+            <div style="background-color: white; border: 1px solid #ddd; padding: 20px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 10px;">
+                    <div>
+                        <strong>Zamówienie nr: #{{ order.id }}</strong>
+                        <br>
+                        <small style="color: #666;">Data: {{ order.created_at|date:"d.m.Y, godz. H:i" }}</small>
+                    </div>
+                    <div>
+                        Status: 
+                        <span class="status-{{ order.status }}">
+                            {{ order.get_status_display }}
+                        </span>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 10px;">
+                    <strong>Adres dostawy:</strong> {{ order.shipping_address }}
+                </div>
+
+                <div style="text-align: right; font-size: 1.2em; margin-top: 10px;">
+                    Łączna kwota: <strong>{{ order.get_total_cost }} PLN</strong>
+                </div>
+            </div>
+        {% empty %}
+            <div style="text-align: center; padding: 40px; color: #777;">
+                <h3>Nie masz jeszcze żadnych zamówień.</h3>
+                <a href="{% url 'Panel_glowny' %}" class="btn-primary" style="display: inline-block; margin-top: 15px;">Wróć do sklepu</a>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

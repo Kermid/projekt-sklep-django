@@ -1,6 +1,6 @@
 from decimal import Decimal
 from django.conf import settings
-from .models import Product  # Zakładam, że Twój model produktu nazywa się Product
+from .models import Product 
 
 class Cart:
     def __init__(self, request):
@@ -54,9 +54,9 @@ class Cart:
         return sum(Decimal(item['price']) * item['quantity'] for item in self.cart.values())
 
     def clear(self):
-        """Wyczyszczenie koszyka (np. po zakupie)."""
-        del self.session['cart_key']
-        self.save()
+        if 'cart_key' in self.session: 
+            del self.session['cart_key']
+            self.save()
 
     def __len__(self):
         """Zwracanie liczby pozycji w koszyku."""

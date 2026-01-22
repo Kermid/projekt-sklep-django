@@ -56,4 +56,21 @@
         </div>
     </div>
 </div>
+
+<div style="margin-top: 20px; text-align: right;">
+    <h3>Do zapłaty: {{ cart.get_total_price }} PLN</h3>
+    
+    {% if user.is_authenticated %}
+        <form action="{% url 'order_create' %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn-primary" style="background-color: #27ae60; font-size: 1.2rem;">
+                ZAMAWIAM I PŁACĘ
+            </button>
+        </form>
+    {% else %}
+        <p>Aby złożyć zamówienie, musisz się zalogować.</p>
+        <a href="{% url 'login' %}" class="btn-primary">Zaloguj się</a>
+    {% endif %}
+</div>
+
 {% endblock %}

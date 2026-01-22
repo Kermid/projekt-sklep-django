@@ -123,4 +123,67 @@ body {
     text-align: center;
     padding: 20px 0;
     width: 100%;
+     margin-top: 50px;
+}
+
+input[name="q"] {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: 100%;
+    max-width: 300px; 
+}
+
+button[type="submit"] {
+    padding: 10px 20px;
+    background: #3498db;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button[type="submit"]:hover {
+    background: #2980b9;
+}
+
+
+.messages {
+    list-style: none;
+    margin-bottom: 20px;
+    padding: 0;
+}
+
+.messages li {
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 5px;
+}
+
+.messages .success, .messages .info {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.messages .error, .messages .warning {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.status-paid {
+    color: #27ae60; 
+    font-weight: bold;
+}
+
+.status-shipped {
+    color: #2980b9;
+    font-weight: bold;
+}
+
+.status-pending {
+    color: #f39c12; 
+    font-weight: bold;
 }

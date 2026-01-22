@@ -2,9 +2,11 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, logout , authenticate
 from django.contrib import messages
-from .models import Product
+from .models import Product, OrderItem, Order
 from django.views.decorators.http import require_POST
 from .cart import Cart
+from django.db.models import Q
+from django.contrib.auth.decorators import login_required
 
 def product_list(request):
     products = Product.objects.filter(is_active=True)
@@ -50,7 +52,7 @@ def logout_user(request):
 def cart_add(request, product_id):
     cart = Cart(request)
     product = get_object_or_404(Product, id=product_id)
-    # Tutaj proste dodanie 1 sztuki. Możesz to rozbudować o formularz ilości.
+    # dodanie 1 sztuki
     cart.add(product=product, quantity=1)
     return redirect(request.META.get('HTTP_REFERER', '/'))
 
@@ -63,3 +65,53 @@ def cart_remove(request, product_id):
 def cart_detail(request):
     cart = Cart(request)
     return render(request, 'cart/detail.html', {'cart': cart})
+
+def product_list(request):
+    query = request.GET.get('q') # pobiera frazę z paska wyszukiwania
+    products = Product.objects.filter(is_active=True)
+
+    if query:
+        # filtrowanie szuka w nazwie lub opisie
+        products = products.filter(
+            Q(name__icontains=query) | Q(category__name__icontains=query)
+        )
+
+    return render(request, 'Sklep/Panel_glowny.html', {'products': products})
+
+@login_required
+def user_orders(request):
+    #pobiera zamówienia zalogowanego użytkownika 
+    orders = Order.objects.filter(user=request.user).order_by('-created_at') 
+    return render(request, 'Sklep/user_orders.html', {'orders': orders})
+
+@login_required
+def order_create(request):
+    cart = Cart(request)
+    
+    # Zabezpieczenie pusty koszyk
+    if len(cart) == 0:
+        return redirect('cart_detail')
+
+    if request.method == 'POST':
+        #  Tworzymy zamówienie w bazie (przypisane do usera)
+        order = Order.objects.create(
+            user=request.user,
+            shipping_address='Adres domyślny użytkownika', 
+            status='paid' #uznajmy ze jest opłacone
+        )
+
+        #Produkty z koszyka do bazy danych
+        for item in cart:
+            OrderItem.objects.create(
+                order=order,
+                product=item['product'],
+                price=item['price'],
+                quantity=item['quantity']
+            )
+
+        cart.clear()
+
+
+        return redirect('user_orders')
+
+    return redirect('cart_detail')

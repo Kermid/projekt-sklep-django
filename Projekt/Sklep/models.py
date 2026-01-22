@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models import Sum, F
+from django.core.validators import MinValueValidator
+from decimal import Decimal
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
@@ -21,8 +23,8 @@ class Product(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products')
     tags = models.ManyToManyField(Tag, related_name='products')
     name = models.CharField(max_length=200)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
-    stock_quantity = models.IntegerField()
+    price = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(Decimal('0.01'))])
+    stock_quantity = models.IntegerField(validators=[MinValueValidator(0)])
     is_active = models.BooleanField(default=True)
 
     
@@ -42,7 +44,7 @@ class Order(models.Model):
         total = self.items.aggregate(
             total=Sum(F('price') * F('quantity'))
         )['total']
-        return total if total else 0.00
+        return total if total else Decimal('0.00')
     
     def __str__(self):
         return f"Zamówienie {self.id} - {self.user.username}"
