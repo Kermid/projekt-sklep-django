@@ -39,14 +39,7 @@
         </tbody>
     </table>
 
-    <div class="row mt-4">
-        <div class="col-md-12 text-right">
-            <h3>Do zapłaty: {{ cart.get_total_price }} PLN</h3>
-        </div>
-    </div>
-
-    <br>
-    <br>
+ 
 
     <div class="row">
         <div class="col-md-12">
@@ -69,6 +62,7 @@
         </form>
     {% else %}
         <p>Aby złożyć zamówienie, musisz się zalogować.</p>
+        <br>
         <a href="{% url 'login' %}" class="btn-primary">Zaloguj się</a>
     {% endif %}
 </div>
