@@ -1,10 +1,17 @@
 {% extends 'sklep/base.html' %}
 
 {% block content %}
-<h2>Rejestracja</h2>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn-primary">Załóż konto</button>
-</form>
+<div class="form-container">
+    <h2 style="text-align: center; margin-bottom: 20px;">Rejestracja</h2>
+    
+    <form method="post">
+        {% csrf_token %}
+        
+        {{ form.as_p }}
+        
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">
+            Załóż konto
+        </button>
+    </form>
+</div>
 {% endblock %}
