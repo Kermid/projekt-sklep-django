@@ -8,7 +8,6 @@ class Cart:
         self.session = request.session
         cart = self.session.get('cart_key')
         if not cart:
-            # Zapisujemy pusty koszyk w sesji
             cart = self.session['cart_key'] = {}
         self.cart = cart
 

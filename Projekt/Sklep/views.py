@@ -52,7 +52,7 @@ def logout_user(request):
 def cart_add(request, product_id):
     cart = Cart(request)
     product = get_object_or_404(Product, id=product_id)
-    # dodanie 1 sztuki
+    
     cart.add(product=product, quantity=1)
     return redirect(request.META.get('HTTP_REFERER', '/'))
 
@@ -67,11 +67,10 @@ def cart_detail(request):
     return render(request, 'cart/detail.html', {'cart': cart})
 
 def product_list(request):
-    query = request.GET.get('q') # pobiera frazę z paska wyszukiwania
+    query = request.GET.get('q') 
     products = Product.objects.filter(is_active=True)
 
     if query:
-        # filtrowanie szuka w nazwie lub opisie
         products = products.filter(
             Q(name__icontains=query) | Q(category__name__icontains=query)
         )
@@ -80,7 +79,6 @@ def product_list(request):
 
 @login_required
 def user_orders(request):
-    #pobiera zamówienia zalogowanego użytkownika 
     orders = Order.objects.filter(user=request.user).order_by('-created_at') 
     return render(request, 'Sklep/user_orders.html', {'orders': orders})
 
@@ -88,19 +86,16 @@ def user_orders(request):
 def order_create(request):
     cart = Cart(request)
     
-    # Zabezpieczenie pusty koszyk
     if len(cart) == 0:
         return redirect('cart_detail')
 
     if request.method == 'POST':
-        #  Tworzymy zamówienie w bazie (przypisane do usera)
         order = Order.objects.create(
             user=request.user,
             shipping_address='Adres domyślny użytkownika', 
-            status='paid' #uznajmy ze jest opłacone
+            status='paid'
         )
 
-        #Produkty z koszyka do bazy danych
         for item in cart:
             OrderItem.objects.create(
                 order=order,
